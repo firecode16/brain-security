@@ -6,7 +6,7 @@ server:
 spring:
   application:
     name: brain-security
-  serverHost: localhost
+  serverHost: 192.168.1.122
   serverPort: 3306
   dataBase: DB_LOCAL
   datasource:
