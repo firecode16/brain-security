@@ -1,5 +1,7 @@
 package com.brain.security.config;
 
+import com.brain.security.model.User;
+import com.brain.security.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,19 +12,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author firecode16
+ *
  */
 @Component
 public class JwtConfig {
+    @Autowired
+    private UserRepository usuarioRepository;
 
     @Value("${security.jwt.expiration-time}")
-    private long expiration;
+    private long expirationTime;
 
     private Key secretKey;
 
@@ -33,18 +38,26 @@ public class JwtConfig {
         secretKey = Keys.hmacShaKeyFor(apiSecretBytes);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String username) {
+        final User user = usuarioRepository.findByUsername(username);
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        
+        claims.put("userid", user.getUserId());
+        claims.put("username", username);
+        claims.put("email", user.getEmail());
+        claims.put("fullName", user.getFullName());
+        claims.put("phone", user.getPhone());
+        claims.put("date", user.getRegistrationDate());
+        return createToken(claims, username);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String username) {
         return Jwts
                 .builder()
                 .claims(claims)
-                .subject(subject)
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getEncoded()))
                 .compact();
     }

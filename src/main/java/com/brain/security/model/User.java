@@ -11,14 +11,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import lombok.Data;
 
 /**
- *
  * @author firecode16
+ *
  */
 @Entity
 @Table(name = "users")
@@ -28,9 +30,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long userId;
 
-    private String username;
     private String password;
+    private String username;
+    private String email;
+    private String fullName;
+    private String phone;
+    private String profilePhoto;
+    @Temporal(TemporalType.TIMESTAMP)
+    private String registrationDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -45,8 +54,13 @@ public class User {
     public int hashCode() {
         int hash = 3;
         hash = 47 * hash + Objects.hashCode(this.id);
-        hash = 47 * hash + Objects.hashCode(this.username);
         hash = 47 * hash + Objects.hashCode(this.password);
+        hash = 47 * hash + Objects.hashCode(this.username);
+        hash = 47 * hash + Objects.hashCode(this.email);
+        hash = 47 * hash + Objects.hashCode(this.fullName);
+        hash = 47 * hash + Objects.hashCode(this.phone);
+        hash = 47 * hash + Objects.hashCode(this.profilePhoto);
+        hash = 47 * hash + Objects.hashCode(this.registrationDate);
         return hash;
     }
 
@@ -62,10 +76,26 @@ public class User {
             return false;
         }
         final User other = (User) obj;
+
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
         if (!Objects.equals(this.username, other.username)) {
             return false;
         }
-        if (!Objects.equals(this.password, other.password)) {
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.fullName, other.fullName)) {
+            return false;
+        }
+        if (!Objects.equals(this.phone, other.phone)) {
+            return false;
+        }
+        if (!Objects.equals(this.profilePhoto, other.profilePhoto)) {
+            return false;
+        }
+        if (!Objects.equals(this.registrationDate, other.registrationDate)) {
             return false;
         }
         return Objects.equals(this.id, other.id);

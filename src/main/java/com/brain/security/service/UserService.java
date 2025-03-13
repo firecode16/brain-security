@@ -17,8 +17,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User searchByName(String username) {
-        return userRepository.findByUsername(username);
+    public User searchByUsernameOrEmail(String username, String email) {
+        return userRepository.findByUsernameIgnoreCaseOrEmailIgnoreCase(username, email);
     }
 
     @Transactional

@@ -19,7 +19,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RegisterRequest {
 
+    private Long userId;
+    private String email;
     private String username;
     private String password;
+    private String fullName;
+    private String phone;
+    private String registrationDate;
     private Set<RolEnum> roles;
 }

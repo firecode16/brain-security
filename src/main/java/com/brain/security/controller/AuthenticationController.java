@@ -4,6 +4,8 @@ import com.brain.security.config.JwtConfig;
 import com.brain.security.enums.RolEnum;
 import com.brain.security.model.AuthRequest;
 import com.brain.security.model.AuthResponse;
+import com.brain.security.model.RefreshTokenRequest;
+import com.brain.security.model.RefreshTokenResponse;
 import com.brain.security.model.RegisterRequest;
 import com.brain.security.model.Rol;
 import com.brain.security.model.User;
@@ -51,7 +53,7 @@ public class AuthenticationController {
 
         //check if user exists and password is OK
         if (userDetails != null && passwordEncoder.matches(authRequest.getPassword(), userDetails.getPassword())) {
-            String jwt = jwtConfig.generateToken(userDetails);
+            String jwt = getToken(userDetails.getUsername());
             return ResponseEntity.ok(new AuthResponse(jwt));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username or password is bad");
@@ -60,13 +62,18 @@ public class AuthenticationController {
 
     @PostMapping("/auth/signup")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        if (userService.searchByName(registerRequest.getUsername()) != null) {
-            return ResponseEntity.badRequest().body("Username is currently in Use");
+        if (userService.searchByUsernameOrEmail(registerRequest.getUsername(), registerRequest.getEmail()) != null) {
+            return ResponseEntity.badRequest().body("Username or email is currently in Use");
         }
 
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
+        user.setUserId(registerRequest.getUserId());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setFullName(registerRequest.getFullName());
+        user.setPhone(registerRequest.getPhone());
+        user.setRegistrationDate(registerRequest.getRegistrationDate());
 
         Set<Rol> roles = new HashSet<>();
 
@@ -88,6 +95,20 @@ public class AuthenticationController {
         }
 
         userService.saveUser(user);
-        return ResponseEntity.ok().body("{\"message\": \"The User was successfully registered\"}");
+        String jwt = getToken(user.getUsername());
+        return ResponseEntity.ok(new AuthResponse(jwt));
+    }
+
+    @PostMapping("/auth/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshToken) {
+        String token = refreshToken.getToken();
+        String username = jwtConfig.extractUsername(token);
+        String refreshNewToken = getToken(username);
+
+        return ResponseEntity.ok(new RefreshTokenResponse(refreshNewToken));
+    }
+    
+    private String getToken(String username) {
+        return jwtConfig.generateToken(username);
     }
 }
