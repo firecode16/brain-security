@@ -25,6 +25,8 @@ public class RegisterRequest {
     private String password;
     private String fullName;
     private String phone;
+    private String occupation;
+    private String address;
     private String registrationDate;
     private Set<RolEnum> roles;
 }

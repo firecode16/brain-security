@@ -38,6 +38,8 @@ public class User {
     private String fullName;
     private String phone;
     private String profilePhoto;
+    private String occupation;
+    private String address;
     @Temporal(TemporalType.TIMESTAMP)
     private String registrationDate;
 
@@ -60,6 +62,8 @@ public class User {
         hash = 47 * hash + Objects.hashCode(this.fullName);
         hash = 47 * hash + Objects.hashCode(this.phone);
         hash = 47 * hash + Objects.hashCode(this.profilePhoto);
+        hash = 47 * hash + Objects.hashCode(this.occupation);
+        hash = 47 * hash + Objects.hashCode(this.address);
         hash = 47 * hash + Objects.hashCode(this.registrationDate);
         return hash;
     }
@@ -93,6 +97,12 @@ public class User {
             return false;
         }
         if (!Objects.equals(this.profilePhoto, other.profilePhoto)) {
+            return false;
+        }
+        if (!Objects.equals(this.occupation, other.occupation)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
             return false;
         }
         if (!Objects.equals(this.registrationDate, other.registrationDate)) {

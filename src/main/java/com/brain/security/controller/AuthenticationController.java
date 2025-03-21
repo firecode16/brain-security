@@ -74,6 +74,8 @@ public class AuthenticationController {
         user.setFullName(registerRequest.getFullName());
         user.setPhone(registerRequest.getPhone());
         user.setRegistrationDate(registerRequest.getRegistrationDate());
+        user.setOccupation(registerRequest.getOccupation());
+        user.setAddress(registerRequest.getAddress());
 
         Set<Rol> roles = new HashSet<>();
 
