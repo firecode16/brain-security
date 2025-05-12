@@ -1,5 +1,6 @@
 package com.brain.security.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -16,15 +18,18 @@ import jakarta.persistence.TemporalType;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author firecode16
  *
  */
+@Getter
+@Setter
+
 @Entity
 @Table(name = "users")
-@Data
 public class User {
 
     @Id
@@ -37,7 +42,12 @@ public class User {
     private String email;
     private String fullName;
     private String phone;
-    private String profilePhoto;
+    @Lob
+    @Column(name = "avatarProfile", columnDefinition = "LONGBLOB")
+    private byte[] avatarProfile;
+    @Lob
+    @Column(name = "backdropProfile", columnDefinition = "LONGBLOB")
+    private byte[] backdropProfile;
     private String occupation;
     private String address;
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,7 +71,8 @@ public class User {
         hash = 47 * hash + Objects.hashCode(this.email);
         hash = 47 * hash + Objects.hashCode(this.fullName);
         hash = 47 * hash + Objects.hashCode(this.phone);
-        hash = 47 * hash + Objects.hashCode(this.profilePhoto);
+        hash = 47 * hash + Objects.hashCode(this.avatarProfile);
+        hash = 47 * hash + Objects.hashCode(this.backdropProfile);
         hash = 47 * hash + Objects.hashCode(this.occupation);
         hash = 47 * hash + Objects.hashCode(this.address);
         hash = 47 * hash + Objects.hashCode(this.registrationDate);
@@ -96,7 +107,10 @@ public class User {
         if (!Objects.equals(this.phone, other.phone)) {
             return false;
         }
-        if (!Objects.equals(this.profilePhoto, other.profilePhoto)) {
+        if (!Objects.equals(this.avatarProfile, other.avatarProfile)) {
+            return false;
+        }
+        if (!Objects.equals(this.backdropProfile, other.backdropProfile)) {
             return false;
         }
         if (!Objects.equals(this.occupation, other.occupation)) {
