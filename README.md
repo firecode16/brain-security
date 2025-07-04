@@ -13,3 +13,7 @@ Stack:<br>
 Structure project<br>
 
 ![image](https://github.com/user-attachments/assets/3f439f59-986a-4254-9f30-0c4d7738ee76)
+
+Demo video
+
+https://www.youtube.com/watch?v=vEUClr6Gnfg
