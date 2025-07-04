@@ -8,4 +8,8 @@ Stack:<br>
   5.- Spring data jpa<br>
   6.- MySql<br>
   7.- MongoDB
-  
+<br>  
+
+Structure project<br>
+
+![image](https://github.com/user-attachments/assets/3f439f59-986a-4254-9f30-0c4d7738ee76)
